@@ -5,27 +5,29 @@ int sort(int [], int);
 void printarray(int [], int);
 int * arraycopy(int [], int);
 int issorted(int [], int);
+void swap (int [], int);
 int* getPossibleSwaps(int [], int);
+int bruteforce(int [], int, int, int*);
 
 int main(int argc, char* argv[]) {
-
-    int train[] = {5, 10, 3, 6, 4, 1, 8, 2, 9, 7};
-    //int train[] = {1, 2, 3, 4, 5};
     int ncars = 10;
-
-
-    //for (int i = 0; i < ncars; i++) {
-    //    train[i] = ncars - i;
-    //}
-
-
-
-    //sort(train, ncars);
-    //printarray(train, ncars);
-
-    //int sorted = issorted(train, ncars);
-    //printf("%d\n", sorted);
     int mindepth = 0;
+
+    // Get input
+    printf("Length of train: ");
+    scanf("%d",&ncars);
+    int* train = (int *)malloc(ncars * sizeof(int));
+    for (int i = 0; i < ncars; i++) {
+        printf("Car %d: ", i + 1);
+        scanf("%d", &train[i]);
+    }
+
+    for (int i = 0; i < ncars; ++i) {
+        printf("%d ", train[i]);
+    }
+    printf("\n");
+    // Done getting input
+
     bruteforce(train, ncars, 0, &mindepth);
     int bs = sort(train, ncars);
 
@@ -36,13 +38,13 @@ int main(int argc, char* argv[]) {
 
 int bruteforce(int train[], int ncars, int depth, int* mindepth) {
     if (!issorted(train, ncars)) {
-        int nswaps = 0;
         int *possibleswaps = getPossibleSwaps(train, ncars);
         for (int i = 0; i < ncars - 1; i++) {
             if (possibleswaps[i]) {
                 int *copy = arraycopy(train, ncars);
                 swap(copy, i);
-                printf("Swapping element %d. Depth: %d\n", i, depth, mindepth);
+                //printarray(copy, ncars);
+                //printf("Swapping element %d. Depth: %d\n", i, depth, mindepth);
                 bruteforce(copy, ncars, depth + 1, mindepth);
             }
         }
@@ -100,11 +102,11 @@ void printarray(int train[], int ncars) {
     }
 }
 
-int* getPossibleSwaps(int array[], int length) {
+int* getPossibleSwaps(int array[], int ncars) {
     int i;
-    int*  canSwapLeft = (int *)malloc(sizeof(int) * (length-1));
+    int*  canSwapLeft = (int *)malloc(sizeof(int) *  ncars-1);
 
-    for(i = 0; i < length - 1; ++i) {
+    for(i = 0; i < ncars - 1; ++i) {
         if (array[i] > array[i + 1])
             canSwapLeft[i] = 1;
         else
